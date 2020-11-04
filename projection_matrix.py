@@ -90,24 +90,22 @@ def estimate_camera_matrix(pts2d: np.ndarray,
     '''
 
     start_time = time.time()
-    P = None
-
     kwargs = {'pts2d':pts2d,
               'pts3d':pts3d}
 
-    #############################################################################
-    # TODO: YOUR CODE HERE
-    ############################################################################
-
-    raise NotImplementedError('`estimate_camera_matrix` function in '
-                              + 'projection_matrix.py needs to be implemented')
-    #############################################################################
-    #                             END OF YOUR CODE
-    ############################################################################
-
+    optres = least_squares(
+        objective_func,
+        initial_guess.flatten()[:11],
+        method='lm',
+        verbose=2,
+        max_nfev=50000,
+        kwargs=kwargs
+    )
     print("Time since optimization start", time.time() - start_time)
 
-    return M
+    P_vect = np.append(optres.x, 1)
+    P = P_vect.reshape((3,4))
+    return P
 
 def decompose_camera_matrix(P: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     '''

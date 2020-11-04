@@ -121,19 +121,8 @@ def decompose_camera_matrix(P: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
 
         hint: use scipy.linalg.rq()
     '''
-    K = None
-    R = None
-    ############################################################################
-    # TODO: YOUR CODE HERE
-    ############################################################################
-
-    raise NotImplementedError('`decompose_camera_matrix` function in '
-                              + 'projection_matrix.py needs to be implemented')
-    ############################################################################
-    #                             END OF YOUR CODE
-    ############################################################################
-
-    return K, R
+    M = P[:, :3]
+    return rq(M)
 
 def calculate_camera_center(P: np.ndarray,
                             K: np.ndarray, 

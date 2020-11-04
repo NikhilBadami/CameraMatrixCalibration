@@ -139,17 +139,9 @@ def calculate_camera_center(P: np.ndarray,
     -   cc: A numpy array of shape (1, 3) representing the camera center
             location in world coordinates
     """
-    cc = None
-    #############################################################################
-    # TODO: YOUR CODE HERE
-    ############################################################################
-
-    raise NotImplementedError('`calculate_camera_center` function in '
-                              + 'projection_matrix.py needs to be implemented')
-    #############################################################################
-    #                             END OF YOUR CODE
-    ############################################################################
-    return cc
+    p_k = np.matmul(np.linalg.inv(K), P)
+    p_k_r = np.matmul(np.linalg.inv(R_T), p_k)
+    return -p_k_r[:, 3]
 
 def visualize_bounding_box(P, points_3d, img):
     """

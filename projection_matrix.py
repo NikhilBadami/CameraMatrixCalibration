@@ -25,22 +25,13 @@ def objective_func(x, **kwargs):
                     projected and actual 2D points
 
     """
-    diff = None
-
     points_2d = kwargs['pts2d']
     points_3d = kwargs['pts3d']
-
-    ############################################################################
-    # TODO: YOUR CODE HERE
-    ############################################################################
-    
-    raise NotImplementedError('`objective_func` function in '
-                              + 'projection_matrix.py needs to be implemented')
-    ############################################################################
-    #                             END OF YOUR CODE
-    ############################################################################
-
-    return diff
+    P_vect = np.append(x, 1)
+    P = P_vect.reshape((3, 4))
+    proj_est = projection(P, points_3d)
+    diff = proj_est - points_2d
+    return diff.flatten()
 
 def projection(P: np.ndarray, points_3d: np.ndarray) -> np.ndarray:
     """

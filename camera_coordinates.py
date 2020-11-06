@@ -19,15 +19,12 @@ def transformation_matrix(wRc_T, wtc):
     - M: 4x4 transformation matrix that transform points in the world 
          coordinate system to camera coordinate system.
     """
-    M = None
-    #############################################################################
-    # TODO: YOUR CODE HERE
-    ############################################################################
-    raise NotImplementedError('`transformation_matrix` function in '
-                              + 'camera_coordinates.py needs to be implemented')
-    #############################################################################
-    #                             END OF YOUR CODE
-    ############################################################################
+    M = np.zeros((4, 4))
+    M[:3, :3] = wRc_T
+    M[3, :3] = np.array([0, 0, 0])
+    rot_trans = np.matmul(-wRc_T, wtc.T)
+    M[:3, 3] = rot_trans.reshape(rot_trans.shape[0])
+    M[3, 3] = 1
     return M
 
 
@@ -46,18 +43,12 @@ def convert_3d_points_to_camera_coordinate(M, points_3d_w):
     Returns:
     - points_3d_c: n x 4 array of points [X_i,Y_i,Z_i,1] in homogenouos coordinates.
     """
-    points_3d_c = None
-    #############################################################################
-    # TODO: YOUR CODE HERE
-    ############################################################################
-
-    raise NotImplementedError('`convert_3d_points_to_camera_coordinate` function in '
-                              + 'camera_coordinates.py needs to be implemented')
-    #############################################################################
-    #                             END OF YOUR CODE
-    ############################################################################
-    return points_3d_c
-
+    points_3d = np.ones((points_3d_w.shape[0], 4))
+    if points_3d_w.shape[1] != 4:
+        points_3d[:, :3] = points_3d_w
+    else:
+        points_3d = points_3d_w
+    return np.matmul(M, points_3d.T).T
 
 def projection_from_camera_coordinates(K, points_3d_c):
     """
@@ -72,17 +63,21 @@ def projection_from_camera_coordinates(K, points_3d_c):
     """
     # normalize K
     K /= K[-1, -1]
-    projected_points_2d = None
-    #############################################################################
-    # TODO: YOUR CODE HERE
-    ############################################################################
+    points_3d = np.ones((points_3d_c.shape[0], 4))
+    if points_3d_c.shape[1] != 4:
+        points_3d[:, :3] = points_3d_c
+    else:
+        points_3d = points_3d_c
 
-    raise NotImplementedError('`projection_in_camera_coordinates` function in '
-                              + 'camera_coordinates.py needs to be implemented')
-    #############################################################################
-    #                             END OF YOUR CODE
-    ############################################################################
-    return projected_points_2d
+    i_o = np.array([
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0]
+    ])
+    k_io = np.matmul(K, i_o)
+    projected_points = np.matmul(k_io, points_3d.T).T
+    homogeneous = projected_points / projected_points[:, -1][:, None]
+    return homogeneous[:, :2]
 
 
 def visualize_bounding_box_camera_coordinates(P, points_3d_w, img):

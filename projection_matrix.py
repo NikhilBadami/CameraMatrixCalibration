@@ -160,15 +160,7 @@ def visualize_bounding_box(P, points_3d, img):
     _, ax = plt.subplots()
 
     ax.imshow(img)
-    projected = None # your 2D projectd points
-    #############################################################################
-    # TODO: YOUR CODE HERE
-    ############################################################################
-    raise NotImplementedError('`visualize_bounding_box` function in '
-                              + 'projection_matrix.py needs to be implemented')
-    #############################################################################
-    #                             END OF YOUR CODE
-    ############################################################################
+    projected = projection(P, points_3d) # your 2D projectd points
     # unit vectors in x, y, and z
     x, y, z = np.array([1, 0, 0]), np.array([0, 1, 0]), np.array([0, 0, 1])
     

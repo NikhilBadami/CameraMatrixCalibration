@@ -1,4 +1,4 @@
-# CS 6476 project 4: Camera Projection Matrix Estimation
+# Camera Projection Matrix Estimation
 
 
 # Setup
